@@ -4,6 +4,7 @@ from django.forms.widgets import DateTimeInput
 from django.utils import translation
 from django.utils.safestring import mark_safe
 from django.utils.html import conditional_escape
+import django
 
 try:
     import json
@@ -124,7 +125,13 @@ class DateTimePicker(DateTimeInput):
     def render(self, name, value, attrs=None):
         if value is None:
             value = ''
-        input_attrs = self.build_attrs(attrs, type=self.input_type, name=name)
+        if django.VERSION < (1,11):
+            input_attrs = self.build_attrs(attrs, type=self.input_type, name=name)
+        else:
+            base_attrs = {'name': name}
+            if 'class' in self.attrs:
+                base_attrs['class'] = self.attrs['class']
+            input_attrs = self.build_attrs(attrs, base_attrs)
         if value != '':
             # Only add the 'value' attribute if a value is non-empty.
             input_attrs['value'] = force_text(self._format_value(value))
