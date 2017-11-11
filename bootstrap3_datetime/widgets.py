@@ -20,8 +20,9 @@ class DateTimePicker(DateTimeInput):
     class Media:
         class JsFiles(object):
             def __iter__(self):
-                yield 'bootstrap3_datetime/js/moment.min.js'
-                yield 'bootstrap3_datetime/js/bootstrap-datetimepicker.min.js'
+                if self.do_init_js:
+                    yield 'bootstrap3_datetime/js/moment.min.js'
+                    yield 'bootstrap3_datetime/js/bootstrap-datetimepicker.min.js'
                 lang = translation.get_language()
                 if lang:
                     lang = lang.lower()
@@ -102,7 +103,8 @@ class DateTimePicker(DateTimeInput):
             })(window);
         </script>'''
 
-    def __init__(self, attrs=None, format=None, options=None, div_attrs=None, icon_attrs=None):
+    def __init__(self, attrs=None, format=None, options=None, div_attrs=None, icon_attrs=None, do_init_js=False):
+        self.do_init_js = do_init_js
         if not icon_attrs:
             icon_attrs = {'class': 'glyphicon glyphicon-calendar'}
         if not div_attrs:
