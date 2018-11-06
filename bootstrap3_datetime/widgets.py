@@ -19,6 +19,9 @@ except ImportError:  # python3
 class DateTimePicker(DateTimeInput):
     class Media:
         class JsFiles(object):
+            def __reversed__(self):
+                return self.__iter__()
+            
             def __iter__(self):
                 if self.do_init_js:
                     yield 'bootstrap3_datetime/js/moment.min.js'
